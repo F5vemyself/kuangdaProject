@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>the models we can choose</title>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<!--    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>-->
+
+<!--    <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">-->
+    <style>
+        body {
+            padding:0;
+            margin:0;
+        }
+        h1{
+            margin-top: 5%;
+            margin-left: 15%;
+        }
+        .headtext{
+            margin-left: 15%;
+        }
+        .form-all .all{
+            margin-left: 15%;
+        }
+
+        .form-all .show{
+            margin: 5px 2px 3px 4px;
+            display: inline-block;
+            height: 40%;
+            width:30%;
+        }
+        .addr{
+            margin-left: 1px;
+            margin-right: 1px;
+            white-space:normal;
+            word-break: break-all;
+
+        }
+        .img{
+            display:flex;
+            flex-wrap:wrap;
+            justify-content: left;
+        }
+    </style>
+<!--    <link rel="stylesheet" href="/static/page.css">-->
+
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
+<!--    <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">-->
+<!--    <style>-->
+<!--      .bd-placeholder-img {-->
+<!--        font-size: 1.125rem;-->
+<!--        text-anchor: middle;-->
+<!--      }-->
+
+<!--      @media (min-width: 768px) {-->
+<!--        .bd-placeholder-img-lg {-->
+<!--          font-size: 3.5rem;-->
+<!--        }-->
+<!--      }-->
+<!--    </style>-->
+<!--    <link rel="stylesheet" href="/static/style.css">-->
+</head>
+
+<body>
+<h1>欢迎,<span class="user"> </span> </h1>
+<p class="headtext">choose the model you want to predict</p>
+<!--<p class="user"></p>-->
+ <form class = "form-all" >
+<!--     <p>Built using Pytorch, Flask and Love</p>-->
+     <div class="all" >
+
+<!--         <form class = "form-all" method="get">-->
+         <div class="img"> </div>
+    </div>
+</form>
+
+
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+    //显示用户名,用户信息获得
+    usename=["user1","user2","user3"];
+    var userelement = `${usename[0]}`;
+    var userhtml = document.getElementsByClassName("user")[0];
+    userhtml.innerHTML =userelement;
+
+    //循环显示div
+    var img = [{model_name:"7_140",train_time:"2020-12-31 19:26:42",src:"./static/pytorch.png",hyparam1:4,hyparam2:2,version:3,address:"8898988989898989898980000000000000009899",acc:0.9,},
+        {model_name:"7_140",train_time:"2020-12-31 23:02:01",src:"./static/pytorch.png",hyparam1:4,hyparam2:2,version:3,address:"8898988989898989898989899",acc:0.8},
+        {model_name:"7_140",train_time:"2021-12:31 09:26:42",src:"./static/pytorch.png",hyparam1:4,hyparam2:2,version:3,address:"8898988989898989898989899",acc:0.85},
+        // {id:4,birthday:"2021-12:31 09:26:42",src:"3.jpg",motherId:4,fatherId:2,version:3,address:"8898988989898989898989899",price:0,sell:true}
+    ];
+    var imgElement = '';
+    img.forEach(item =>{
+        imgElement+= `<div class="show" >`
+        // console.log("ok!")
+        // if(item.model_name>0){
+            imgElement+= `<p align="left">model_name: ${item.model_name}</p>`
+        // }else{
+        //     imgElement+= `<p align="left">ID: 不存在！</p>`
+        // }
+        imgElement+= `<p align="left">train_time: ${item.train_time}</p>
+                      <p align="left">hyparam1: ${item.hyparam1}</p>
+                      <p align="left">hyparam2: ${item.hyparam2}</p>
+                      <p align="left">版本为: ${item.version}</p>
+
+                      <img  class="show_img"  src="${item.src}"  width="207px" height="222px">
+                      `
+
+        // if(item.sell){
+            imgElement+= `<p align="left" class="price" >当前准确率：${item.acc}</p>
+                          <input type="button" name="done" value="predict" onclick="Topredict('${item.model_name}')">
+                          </div>`
+        // }else{
+        //     imgElement+= `</div>` '${item.src}',
+        // }
+    })
+
+    var element = document.getElementsByClassName("img")[0];
+    element.innerHTML = imgElement;
+
+    function Topredict(model_name) {
+        var data = {
+        data: JSON.stringify({
+                        "model_name":model_name
+                    }),
+        };
+        $.ajax({
+            url:'http://127.0.0.1:5050/',
+            type:"POST",
+            data:data,
+            // data:{
+            //     model_name:model_name,
+            // },
+            // dataType:"json",
+            success:function(res){
+
+                    console.log(res)
+                    console.log("succeeded")
+                    console.log(data)
+                    // console.log(url)
+                    // console.log(data)
+                    const model_name = JSON.parse(data.data).model_name
+                    window.location.href='%3F'+model_name
+
+                },
+            error:function (res) {
+                    console.log(res);
+                    console.log("error")
+                    // console.log(my_data)
+                }
+        })
+
+
+
+
+        // var imgsrc = document.getElementsByClassName("show_img")[0].src;
+        // var imgsrc.toString().substr(-5);
+        // location.href = './sell.html?'+imgsrc;
+    }
+    // function BuyPanda() {
+    //     alert("购买成功");
+    // }
+
+
+</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="//stackpath.bootstrapcdn.com/bootstrapC/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+</body>
+</html>

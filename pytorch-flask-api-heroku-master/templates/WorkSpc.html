@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link
+      href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Document</title>
+  </head>
+  <style>
+    .title {
+      text-align: center;
+    }
+  </style>
+  <body>
+    <div class="container">
+      <div class="row clearfix">
+        <div class="col-md-12 column">
+          <div class="jumbotron">
+            <h1 class="title">工作面信息页面</h1>
+          </div  >
+<!--          <div id="Workinfo" d="{{caiqu_id}}}">-->
+
+<!--          </div>-->
+          <table class="table">
+                <thead>
+                  <tr>
+                    <th>工作面编号</th>
+                    <th>工作面名称</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                {% for i,j in data %}
+                  <tr>
+
+                  <td id="jmp" onclick="myFunction(('{{ i }}'))"> {{ i }} </td>
+                  <td>{{ j }}</td>
+                  </tr>
+                {% endfor %}
+
+                </tbody>
+          </table>
+<!--            </form>>-->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="//stackpath.bootstrapcdn.com/bootstrapC/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+</body>
+</html>
