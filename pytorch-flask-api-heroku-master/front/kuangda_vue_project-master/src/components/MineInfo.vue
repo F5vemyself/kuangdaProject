@@ -60,7 +60,7 @@
                         </el-table-column>
                         <el-table-column label="操作">
                             <template slot-scope="scope">
-                                <el-button @click="getMineId(scope.row.mine_id)" type="text">查看工作面信息</el-button>
+                                <el-button @click="getMineId(scope.row.mine_id,scope.row.mine_name)" type="text">查看工作面信息</el-button>
                                 <el-button @click="showMineInfoDialog(scope.row.mine_id,scope.row.mine_name)" type="text">编辑</el-button>
                                 <el-button @click="deleteMineInfo(scope.row.mine_id)" type="text">删除</el-button>
                             </template>
@@ -139,6 +139,7 @@ export default {
             axios.get(path)
                 .then((res) => {
                     this.tableData = res.data;    
+                    // console.log(res.data);
                 })
                 .catch((error) => {
                     // eslint-disable-next-line
@@ -146,8 +147,11 @@ export default {
                 });
         },
         // 根据相应矿井的编号_进行页面跳转，显示对应的工作面信息
-        getMineId(mine_id){
-            this.$router.push({name:'work',params:{"mine_id":mine_id}})
+        getMineId(mine_id,mine_name){
+            this.$router.push({name:'work',params:{
+                "mine_id": mine_id,
+                "mine_name": mine_name
+                }})
         },
 
         // 插入矿井信息

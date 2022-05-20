@@ -63,7 +63,26 @@
                         </div>
                     </el-dialog>
                 </el-col>
+
+                <!-- 按照时间查询微震数据 -->
+                <el-col :span="10" class="right-main">
+                        <span class="demonstration">请选择微震发生的区间</span>
+                        <el-date-picker
+                        v-model="time"
+                        type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        :default-time="['12:00:00']">
+                        </el-date-picker>
+
+                    
+                </el-col>
+                <el-col :span="2" class="right-main">
+                    <el-button type="primary" icon="el-icon-search"  @click="inquireByTime()">查询</el-button>
+                </el-col>
+
                 <el-col :span="16" class="right-main">
+                    <h3>"{{mine_name}}"的第"{{work_id}}"个工作面的微震数据</h3>
                     <el-table
                     :data="tableData"
                     stripe 
@@ -212,15 +231,11 @@ export default {
             pageSize: 5,
             count : null,
             table_id: 1,
+            mine_name:"",
+            work_id:"",
 
             // 下拉菜单信息
             options: [{
-                value: 'work_id',
-                label: '工作面编号'
-            }, {
-                    value: 'circle_id',
-                    label: '循环编号'
-            },{
                     value: 'energy',
                     label: '微震能量'
             },{
@@ -229,6 +244,9 @@ export default {
             }],
                 value: '',
 
+            // 根据时间区间查询数据
+            time: '',
+            
             // 新增信息dialog
             dialogFormVisible: false,
             form: {
@@ -271,10 +289,18 @@ export default {
         getMessage() {
             // table_id = 1表示查询所有信息
             this.table_id = 1;
+
+            // 从前一个页面传过来的矿井编号和工作面编号
+            console.log(this.$route.params);
+            this.mine_name = this.$route.params['mine_name'];
+            this.work_id = this.$route.params['work_id'];
+            
             const path = 'http://localhost:5050/api/weizhen_info';
 
             // 分页所需的数据
             var page_data = {
+                // 根据工作面编号查询数据
+                'work_id': this.work_id,
                 'page_num': this.currentPage,    //当前页码
                 'page_size': this.pageSize       //每页显示的信息数
             };
@@ -306,7 +332,9 @@ export default {
                 'searchValue': this.input,
                 // 分页查询相关的内容
                 'page_num': this.currentPage,
-                'page_size': this.pageSize
+                'page_size': this.pageSize,
+                // 当前工作面的id
+                'work_id': this.work_id,
             };
             // 根据用户选择的属性，以及输入的属性值查询信息
             axios.post(path,data)
@@ -323,6 +351,32 @@ export default {
                     console.error(error);
                 })
         },
+        inquireByTime(){
+
+            // table_id = 3表示根据时间区间查询信息
+            this.table_id = 3;
+            var data = {
+                // 用户选择的起止时间
+                'start_time': this.time[0],
+                'end_time': this.time[1],
+                'work_id': this.work_id,
+                // 分页查询相关的内容
+                'page_num': this.currentPage,
+                'page_size': this.pageSize,
+            };
+            const path = 'http://localhost:5050/api/inquire_bytime_weizhen';
+            axios.post(path,data)
+                .then((res)=>{
+                    console.log(res.data);
+                    var records_num = res.data.length;  
+                    var countObject = res.data[records_num-1];
+                    this.count = countObject['count'];
+                     // 删除count信息
+                    res.data.pop();
+                    this.tableData = res.data;
+                })
+        },
+
         // 插入微震信息
         insertWeizhen() {
             const path = 'http://localhost:5050/api/insert_weizhen_info';
@@ -468,6 +522,8 @@ export default {
                 this.getMessage();
             }else if(this.table_id == 2) {
                 this.inquireWeizhen();
+            }else if(this.table_id == 3){
+                this.inquireByTime();
             }
         },
     },
@@ -484,4 +540,7 @@ export default {
   margin-left: 40px;
   margin-top: 30px;
 } 
+.demonstration {
+    margin-right: 20px;
+}
 </style>

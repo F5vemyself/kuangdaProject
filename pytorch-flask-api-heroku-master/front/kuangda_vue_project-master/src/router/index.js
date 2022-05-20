@@ -10,8 +10,16 @@ const routes = [
     component: () => import("../view/WorkPage.vue"),
     name: "work",
   },
-  { path: "/zhijia_data", component: () => import("../view/ZhijiaPage.vue") },
-  { path: "/weizhen_data", component: () => import("../view/WeizhenPage.vue") },
+  {
+    path: "/zhijia_data/:work_id",
+    component: () => import("../view/ZhijiaPage.vue"),
+    name: "zhijia_data",
+  },
+  {
+    path: "/weizhen_data/:work_id",
+    component: () => import("../view/WeizhenPage.vue"),
+    name: "weizhen_data",
+  },
 
   // 路由配置
   {

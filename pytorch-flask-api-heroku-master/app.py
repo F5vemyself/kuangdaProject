@@ -129,7 +129,7 @@ def editMineInfo():
     db.conn.commit()
     return "修改信息成功!"
 
-# 微震数据处理 写复杂了暂时不用了
+# 微震数据处理  写复杂了暂时不用了
 def weizhenProcess2(contents,count):
     work_id = []
     wz_time = []
@@ -146,7 +146,9 @@ def weizhenProcess2(contents,count):
     for content in contents:
         work_id.append(content['work_id'])
         time = content['wz_time']
+
         # time.strftime函数是把datetime.dateime(year,month,day,hour,minute,second)转化为字符串类型
+        # time.strftime函数是把datetime.datime(year,month,day,hour,minute,second)转化为字符串类型
         wz_time.append(time.strftime('%Y-%m-%d %H:%M:%S'))
         # 将x,y,z坐标拼接起来,得到(x,y,z)形式的数据
         ax_x.append(float(content['ax_x']))
@@ -215,6 +217,10 @@ def weizhenProcess(contents,count):
 def showWeizhen():
     data = request.json
     work_id = data['work_id']
+
+@app.route('/api/weizhen_info', methods=['GET', 'POST'])
+def showWeizhen():
+    data = request.json
     page_num = data['page_num']
     page_size = data['page_size']
     limit1 = (page_num-1)*page_size
@@ -223,6 +229,7 @@ def showWeizhen():
     count_content = db.select_db(sql)
     count = count_content[0]['count(*)']
     select_sql = "SELECT * FROM weizhen WHERE work_id = {} LIMIT {},{}".format(work_id,limit1,limit2)
+
     # 数据库返回得到的内容
     contents = db.select_db(select_sql)
     # 对得到的数据进行处理，以json格式返回给前端
@@ -244,6 +251,7 @@ def showInquireWeizhen():
     count = len(contents_all)
     select_sql = 'SELECT * FROM weizhen WHERE work_id = {} AND ' \
                  '{} = {} LIMIT {},{}'.format(work_id,name,value,limit1,limit2)
+
     # 数据库返回得到的内容
     contents = db.select_db(select_sql)
     # print(contents)
@@ -251,6 +259,7 @@ def showInquireWeizhen():
     weizhen_data_json = weizhenProcess(contents,count)
     print(weizhen_data_json)
     return weizhen_data_json
+
 
 @app.route('/api/inquire_bytime_weizhen', methods=['GET', 'POST'])
 def showInquireByTimeWeizhen():
@@ -275,6 +284,7 @@ def showInquireByTimeWeizhen():
     weizhen_data_json = weizhenProcess(contents,count)
     print(weizhen_data_json)
     return weizhen_data_json
+
 
 @app.route('/api/insert_weizhen_info', methods=['GET', 'POST'])
 def inserWeizhenInfo():
@@ -392,7 +402,8 @@ def ShowWorkSpc():
     work_name = []
     select_sql1 = 'SELECT work_id FROM workface WHERE mine_id =  '+mine_id
     content1 = db.select_db(select_sql1)
-    # print(content1)
+    print(content1)
+
     for i in range(len(content1)):
         # print(content1[i])
         work_id.append(content1[i]['work_id'])
@@ -433,9 +444,8 @@ def show_pressure():
 
 
 if __name__ == '__main__':
-    # timeProcess(8222,200)
-    app.run(debug=True, port=int(os.environ.get('PORT', 5050)))
 
+    app.run(debug=True, port=int(os.environ.get('PORT', 5050)))
 
     # app.run(debug=True)
     # data = pd.read_csv("./data/pressure1.csv")
